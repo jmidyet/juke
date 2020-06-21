@@ -34,5 +34,3 @@ jobs:
         
       - name: Print the env!
         run: echo "$PROJECT_ID $RUN_SA_KEY"
-        if: github.event.action == 'published'
-      
