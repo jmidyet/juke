@@ -18,11 +18,21 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
+        if: github.ref == 'refs/heads/master'
 
       - name: Dump GitHub context
         env:
           GITHUB_EVENT: ${{ toJson(github.event) }}
         run: echo "$GITHUB_EVENT"
+        if: github.event.action == 'published'
       
-      - name: Use previous env
-        run: echo "$GITHUB_EVENT"
+      - name: Set PROJECT_ID for staging
+        run: |-
+          echo '::set-env name=PROJECT_ID::secrets.STAGING_GCP_PROJECT_ID' \
+          echo '::set-env name=RUN_SA_KEY::secrets.STAGING_GCP_RUN_SA_KEY'
+        if: github.ref == 'refs/heads/master'
+        
+      - name: Print the env!
+        run: echo "$PROJECT_ID $RUN_SA_KEY"
+        if: github.event.action == 'published'
+      
