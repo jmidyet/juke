@@ -1,0 +1,19 @@
+name: Test Workflows
+
+on:
+  push:
+    branches:
+      - main
+    release:
+      types: 
+        - published
+
+jobs:
+  container-job:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
